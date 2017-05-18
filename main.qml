@@ -6,7 +6,7 @@ import org.device.info 1.0;
 
 ApplicationWindow {
     visible: true
-    width: 640
+    width: 740
     height: 480
     title: qsTr("Hello CPU")
     color: "black"

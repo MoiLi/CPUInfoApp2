@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
+#include <QJsonObject>
 
 CPUInfo::CPUInfo(QObject *parent) : QObject(parent)
 {
@@ -29,7 +30,9 @@ void CPUInfo::startLoadCPUInfo()
     }
 
     QVariantList data;
-    QVariantMap current;
+   // QVariantMap current;
+    QJsonObject current;
+    QVariant xx;
 
     QFile file(mSource);
     if(!file.exists()) {
@@ -47,7 +50,10 @@ void CPUInfo::startLoadCPUInfo()
         while (!line.isNull()) {
             // Find a empty line, means, a processor section is finished.
             if (line.isEmpty()) {
-                data.append(current);
+
+           //   xx.setValue(current);
+             data.append(current);
+
             } else {
                 QStringList infos = line.split(":");
 
@@ -55,10 +61,12 @@ void CPUInfo::startLoadCPUInfo()
                     QString name = infos.at(0).trimmed();
                     QString value = infos.at(1).trimmed();
 
-                    if (value.isEmpty()) {
-                        value = "Unknown";
-                    }
-                    current.insert(name, value);
+//                    if (str.isEmpty()) {
+//                        str = "Unknown";
+//                    }
+
+                   current.insert(name, value);
+                   // current->setProperty(name.toStdString().c_str(),value);
                 }
             }
             line = stream.readLine();
@@ -68,6 +76,9 @@ void CPUInfo::startLoadCPUInfo()
     // Close file.
     file.close();
 
+
     // notify UI.
+
+
     emit dataChanged(data);
 }
